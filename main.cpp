@@ -4,6 +4,16 @@ int main()
 {   
     sf::RenderWindow window(sf::VideoMode(), "Quincunx Game", sf::Style::Fullscreen);
 
+    sf::Font font;
+    if (!font.loadFromFile("./res/fonts/Casino.ttf"))
+        std::cout << "Error while loading arial font\n";
+    sf::Text textStart;
+
+    // select the font
+    textStart.setFont(font); // font is a sf::Font
+    textStart.setString("START");
+    textStart.setCharacterSize(100); // in pixels, not points!
+    textStart.setFillColor(sf::Color::Red);
 
     // Ball holder
     sf::ConvexShape ballHolderLeft(3);
@@ -47,6 +57,7 @@ int main()
         window.clear(sf::Color::Black);
         window.draw(ballHolderLeft);
         window.draw(ballHolderRight);
+        window.draw(textStart);
         window.display();
 
     }
