@@ -1,5 +1,6 @@
 all:
-	g++ -std=c++11 main.cpp -o ./bin/game -lsfml-graphics -lsfml-window -lsfml-system
+	g++ main.cpp ./view/*.cpp ./model/*.cpp -o ./bin/game \
+		-std=c++11 -lsfml-graphics -lsfml-window -lsfml-system
 
 run: all
 	./bin/game &
