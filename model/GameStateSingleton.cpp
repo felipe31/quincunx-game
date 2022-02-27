@@ -22,3 +22,11 @@ int GameStateSingleton::getCreditsOut() {
 void GameStateSingleton::setCreditsOut(int newCreditsOut) {
     creditsOut = newCreditsOut;
 }
+
+int GameStateSingleton::getMatchCount() {
+    return matchCount;
+}
+
+void GameStateSingleton::setMatchCount(int count) {
+    matchCount = count;
+}

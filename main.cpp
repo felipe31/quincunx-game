@@ -1,45 +1,84 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include <string>
-#include "./view/Text2Lines.hpp"
+#include "./view/Text2Fields.hpp"
 #include "./model/GameStateSingleton.hpp"
 
-std::string creditsUpdater() {
+std::string creditsCurrentUpdater() {
     GameStateSingleton &gameState = GameStateSingleton::getInstance();
     return std::to_string(gameState.getCreditsCurrent());
 }
 
+
+std::string creditsInsertedTotalUpdater() {
+    GameStateSingleton &gameState = GameStateSingleton::getInstance();
+    return std::to_string(gameState.getCreditsIn());
+}
+
+std::string creditsRemovedUpdater() {
+    GameStateSingleton &gameState = GameStateSingleton::getInstance();
+    return std::to_string(gameState.getCreditsOut());
+}
+
+std::string matchesPlayedUpdater() {
+    GameStateSingleton &gameState = GameStateSingleton::getInstance();
+    return std::to_string(gameState.getMatchCount());
+}
 int main()
 {   
     sf::RenderWindow window(sf::VideoMode(960, 720), "Quincunx Game", sf::Style::Titlebar | sf::Style::Close);
 
 
     int bottomTextY = 650;
+    int topTextY = 5;
 
     sf::Font fontCasino;
     sf::Font fontCasinoFlatItalic;
-    if (!fontCasino.loadFromFile("./res/fonts/Casino.ttf")
-        || !fontCasinoFlatItalic.loadFromFile("./res/fonts/CasinoFlat-Italic.ttf"))
+    if (!fontCasino.loadFromFile("./res/fonts/ChicagoFlat.ttf")
+        || !fontCasinoFlatItalic.loadFromFile("./res/fonts/ChicagoFlat-Italic.ttf"))
         std::cout << "Error while loading fonts\n";
 
-    Text2Lines startText("Press spacebar to", "Start",
-                            sf::Vector2f(50, bottomTextY),
-                            fontCasinoFlatItalic, fontCasino);
+    Text2Fields startText("Press spacebar to", "Start",
+        sf::Vector2f(50, bottomTextY), sf::Vector2f(50, bottomTextY + 20),
+        fontCasinoFlatItalic, fontCasino);
 
-    Text2Lines creditsInText("Press q to", "Credits In",
-                            sf::Vector2f(245, bottomTextY),
-                            fontCasinoFlatItalic, fontCasino);
-
-
-    Text2Lines creditsOutText("Press w to", "Credits Out",
-                            sf::Vector2f(500, bottomTextY),
-                            fontCasinoFlatItalic, fontCasino);
+    Text2Fields creditsInText("Press q to", "Credits In",
+        sf::Vector2f(245, bottomTextY), sf::Vector2f(245, bottomTextY + 20),
+        fontCasinoFlatItalic, fontCasino);
 
 
-    Text2Lines creditsText("Credits", "0",
-                            sf::Vector2f(800, bottomTextY),
-                            fontCasinoFlatItalic, fontCasino);
-    creditsText.setMainStringUpdater(creditsUpdater);
+    Text2Fields creditsOutText("Press w to", "Credits Out",
+        sf::Vector2f(500, bottomTextY), sf::Vector2f(500, bottomTextY + 20),
+        fontCasinoFlatItalic, fontCasino);
+
+
+    Text2Fields creditsText("Credits", "0",
+        sf::Vector2f(800, bottomTextY), sf::Vector2f(800, bottomTextY + 20),
+        fontCasinoFlatItalic, fontCasino);
+
+    creditsText.setMainStringUpdater(creditsCurrentUpdater);
+    creditsText.setPrimary(sf::Color::Yellow);
+
+    Text2Fields creditsInsertedTotalText("Total inserted:", "0",
+        sf::Vector2f(10, topTextY), sf::Vector2f(150, topTextY),
+        fontCasinoFlatItalic, fontCasino, 18, 18);
+    creditsInsertedTotalText.setMainStringUpdater(creditsInsertedTotalUpdater);
+    creditsInsertedTotalText.setPrimary(sf::Color::Yellow);
+
+    Text2Fields creditsRemovedTotalText("Total removed:", "0",
+        sf::Vector2f(400, topTextY), sf::Vector2f(540, topTextY),
+        fontCasinoFlatItalic, fontCasino, 18, 18);
+    creditsRemovedTotalText.setMainStringUpdater(creditsRemovedUpdater);
+    creditsRemovedTotalText.setPrimary(sf::Color::Yellow);
+    
+    Text2Fields matchTotalText("Matches played:", "0",
+        sf::Vector2f(770, topTextY), sf::Vector2f(920, topTextY),
+        fontCasinoFlatItalic, fontCasino, 18, 18);
+    matchTotalText.setMainStringUpdater(matchesPlayedUpdater);
+    matchTotalText.setPrimary(sf::Color::Yellow);
+
+
+
 
     sf::RectangleShape gameBoard(sf::Vector2f(940.f, 600.f));
 
@@ -107,8 +146,6 @@ int main()
                     gameState.setCreditsCurrent(gameState.getCreditsCurrent() + 1);
                     gameState.setCreditsIn(gameState.getCreditsIn() + 1);
                     creditsInText.FillColorPrimary();
-                    std::cout << gameState.getCreditsCurrent();
-                    std::cout << creditsUpdater();
                     break;
                 case sf::Keyboard::W:
                     gameState.setCreditsOut(gameState.getCreditsOut() + gameState.getCreditsCurrent());
@@ -117,6 +154,10 @@ int main()
                     break;
                 case sf::Keyboard::Space:
                     startText.FillColorPrimary();
+                    if (gameState.getCreditsCurrent() > 0) {
+                        gameState.setCreditsCurrent(gameState.getCreditsCurrent() - 1);
+                        gameState.setMatchCount(gameState.getMatchCount() + 1);
+                    }
                     break;
                 }
                 break;
@@ -124,6 +165,12 @@ int main()
         }
         window.clear(sf::Color::Black);
         creditsText.update();
+        creditsInsertedTotalText.update();
+        creditsRemovedTotalText.update();
+        matchTotalText.update();
+        window.draw(creditsInsertedTotalText);
+        window.draw(creditsRemovedTotalText);
+        window.draw(matchTotalText);
         window.draw(startText);
         window.draw(creditsText);
         window.draw(creditsInText);

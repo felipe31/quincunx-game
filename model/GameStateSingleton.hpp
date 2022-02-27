@@ -1,8 +1,8 @@
 class GameStateSingleton {
 protected:
-    GameStateSingleton() : creditsCurrent(0), creditsIn(0), creditsOut(0) {}
+    GameStateSingleton() : creditsCurrent(0), creditsIn(0), creditsOut(0), matchCount(0) {}
 
-    int creditsCurrent, creditsIn, creditsOut;
+    int creditsCurrent, creditsIn, creditsOut, matchCount;
     static GameStateSingleton* instance;
 
 public:
@@ -21,5 +21,6 @@ public:
     int getCreditsOut();
     void setCreditsOut(int newCreditsOut);
 
-
+    int getMatchCount();
+    void setMatchCount(int count);
 };
