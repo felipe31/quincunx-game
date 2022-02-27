@@ -3,6 +3,7 @@
 #include <string>
 #include "./view/Text2Fields.hpp"
 #include "./model/GameStateSingleton.hpp"
+#include "./view/GameBoard.hpp"
 
 std::string creditsCurrentUpdater() {
     GameStateSingleton &gameState = GameStateSingleton::getInstance();
@@ -29,7 +30,7 @@ int main()
     sf::RenderWindow window(sf::VideoMode(960, 720), "Quincunx Game", sf::Style::Titlebar | sf::Style::Close);
 
 
-    int bottomTextY = 650;
+    int bottomTextY = 655;
     int topTextY = 5;
 
     sf::Font fontCasino;
@@ -39,21 +40,21 @@ int main()
         std::cout << "Error while loading fonts\n";
 
     Text2Fields startText("Press spacebar to", "Start",
-        sf::Vector2f(50, bottomTextY), sf::Vector2f(50, bottomTextY + 20),
+        sf::Vector2f(50, bottomTextY), sf::Vector2f(50, bottomTextY + 10),
         fontCasinoFlatItalic, fontCasino);
 
     Text2Fields creditsInText("Press q to", "Credits In",
-        sf::Vector2f(245, bottomTextY), sf::Vector2f(245, bottomTextY + 20),
+        sf::Vector2f(245, bottomTextY), sf::Vector2f(245, bottomTextY + 10),
         fontCasinoFlatItalic, fontCasino);
 
 
     Text2Fields creditsOutText("Press w to", "Credits Out",
-        sf::Vector2f(500, bottomTextY), sf::Vector2f(500, bottomTextY + 20),
+        sf::Vector2f(500, bottomTextY), sf::Vector2f(500, bottomTextY + 10),
         fontCasinoFlatItalic, fontCasino);
 
 
     Text2Fields creditsText("Credits", "0",
-        sf::Vector2f(800, bottomTextY), sf::Vector2f(800, bottomTextY + 20),
+        sf::Vector2f(800, bottomTextY), sf::Vector2f(800, bottomTextY + 10),
         fontCasinoFlatItalic, fontCasino);
 
     creditsText.setMainStringUpdater(creditsCurrentUpdater);
@@ -78,29 +79,7 @@ int main()
     matchTotalText.setPrimary(sf::Color::Yellow);
 
 
-
-
-    sf::RectangleShape gameBoard(sf::Vector2f(940.f, 600.f));
-
-    gameBoard.setFillColor(sf::Color::Transparent);
-    gameBoard.setOutlineColor(sf::Color::White);
-    gameBoard.setOutlineThickness(5);
-    gameBoard.setPosition(sf::Vector2f(10, 40));
-
-    // Ball holder
-    sf::ConvexShape ballHolderLeft(3);
-    sf::ConvexShape ballHolderRight(3);
-    ballHolderLeft.setFillColor(sf::Color::Blue);
-    ballHolderRight.setFillColor(sf::Color::Blue);
-
-    ballHolderLeft.setPoint(0, sf::Vector2f(20.f, 50.f));
-    ballHolderLeft.setPoint(1, sf::Vector2f(170.f, 140.f));
-    ballHolderLeft.setPoint(2, sf::Vector2f(20.f, 140.f));
-
-    ballHolderRight.setPoint(0, sf::Vector2f(370.f, 50.f));
-    ballHolderRight.setPoint(1, sf::Vector2f(220.f, 140.f));
-    ballHolderRight.setPoint(2, sf::Vector2f(370.f, 140.f));
-
+    GameBoard gameBoard = GameBoard(sf::Vector2f(10, 40));
 
     // Logical variables
     GameStateSingleton &gameState = GameStateSingleton::getInstance();
@@ -176,8 +155,6 @@ int main()
         window.draw(creditsInText);
         window.draw(creditsOutText);
         window.draw(gameBoard);
-        window.draw(ballHolderLeft);
-        window.draw(ballHolderRight);
         window.display();
 
     }

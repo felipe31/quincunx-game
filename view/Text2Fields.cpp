@@ -7,8 +7,7 @@ Text2Fields::Text2Fields(std::string preString, std::string mainString,
                         int preSize, int mainSize)
     : preText(sf::Text(preString, preFont, preSize)),
       mainText(sf::Text(mainString, mainFont, mainSize)),
-      prePosition(prePosition), mainPosition(mainPosition), isMainStringUpdater(false)
-{
+      prePosition(prePosition), mainPosition(mainPosition), isMainStringUpdater(false) {
     primary = sf::Color::Red;
     secondary = sf::Color::Magenta;
     preText.setPosition(prePosition);
@@ -17,11 +16,10 @@ Text2Fields::Text2Fields(std::string preString, std::string mainString,
     mainText.setFillColor(primary);
 }
 
-Text2Fields::~Text2Fields()
-{
+Text2Fields::~Text2Fields() {
 }
 
-void Text2Fields::update(){
+void Text2Fields::update() {
     if (isMainStringUpdater) {
         mainText.setString(mainStringUpdater());
     }
