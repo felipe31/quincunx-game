@@ -1,7 +1,7 @@
 #include "GameBoard.hpp"
 
 GameBoard::GameBoard(sf::Vector2f boardPosition)
-    : boardPosition(boardPosition), gameBoard(sf::Vector2f(940.f, 600.f)), dottedField() {
+    : boardPosition(boardPosition), gameBoard(sf::Vector2f(940.f, 600.f)), dottedField(), groundCollider(ground){
 
     // Board outline
     gameBoard.setFillColor(sf::Color::Transparent);
@@ -18,15 +18,21 @@ GameBoard::GameBoard(sf::Vector2f boardPosition)
 
     dottedField.fillDottedField(fieldStart, fieldEnd, 150);
 
+
+    // Ground
+    ground.setSize(sf::Vector2f(gameBoard.getSize().x, 10));
+    ground.setPosition(sf::Vector2f(boardPosition.x, boardPosition.y + gameBoard.getSize().y));
+    ground.setFillColor(sf::Color::Cyan); // TEMP
+
+    groundCollider.setSize(ground.getSize());
+
     // Falling Balls
     // TODO: Move this section to a "start" function
     fallingBalls.addBall(sf::Vector2f(boardPosition.x + gameBoard.getSize().x/2, boardPosition.y), sf::Color::Cyan);
     fallingBalls.addBall(sf::Vector2f(boardPosition.x + gameBoard.getSize().x/2 - 80, boardPosition.y), sf::Color::White);
     fallingBalls.addBall(sf::Vector2f(boardPosition.x + gameBoard.getSize().x/2 - 140, boardPosition.y), sf::Color::Blue);
-    fallingBalls.addBall(sf::Vector2f(boardPosition.x + gameBoard.getSize().x/2 + 80, boardPosition.y), sf::Color::Red);
-    fallingBalls.addBall(sf::Vector2f(boardPosition.x + gameBoard.getSize().x/2 - 20, boardPosition.y), sf::Color::Yellow);
-    fallingBalls.addBall(sf::Vector2f(boardPosition.x + gameBoard.getSize().x/2 + 140, boardPosition.y), sf::Color::Green);
-    fallingBalls.addBall(sf::Vector2f(boardPosition.x + gameBoard.getSize().x/2 + 20, boardPosition.y), sf::Color::Magenta);
+    fallingBalls.addBall(sf::Vector2f(-50, boardPosition.y), sf::Color::Red);
+    fallingBalls.addBall(sf::Vector2f(930, boardPosition.y), sf::Color::Green);
 
 }
 
@@ -35,9 +41,11 @@ void GameBoard::draw(sf::RenderTarget &window, sf::RenderStates state) const {
     window.draw(gameBoard);
     dottedField.drawDots(window);
     fallingBalls.drawBalls(window);
+    window.draw(ground); // TEMP
 }
 
 void GameBoard::update() {
     fallingBalls.update();
+    fallingBalls.handleCollision(groundCollider);
 }
 

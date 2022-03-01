@@ -1,3 +1,5 @@
+#pragma once
+
 class GameStateSingleton {
 protected:
     GameStateSingleton() : creditsCurrent(0), creditsIn(0), creditsOut(0), matchCount(0) {}

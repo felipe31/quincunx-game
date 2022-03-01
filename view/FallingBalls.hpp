@@ -1,3 +1,4 @@
+#pragma once
 #include <SFML/Graphics.hpp>
 #include <vector>
 #include <memory>
@@ -12,4 +13,5 @@ public:
     void addBall(sf::Vector2f position, sf::Color color);
     void drawBalls(sf::RenderTarget &window) const;
     void update();
+    bool handleCollision(Collider& otherCollider);
 };

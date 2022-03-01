@@ -148,6 +148,7 @@ int main()
         creditsRemovedTotalText.update();
         matchTotalText.update();
         gameBoard.update();
+        window.draw(gameBoard);
         window.draw(creditsInsertedTotalText);
         window.draw(creditsRemovedTotalText);
         window.draw(matchTotalText);
@@ -155,7 +156,6 @@ int main()
         window.draw(creditsText);
         window.draw(creditsInText);
         window.draw(creditsOutText);
-        window.draw(gameBoard);
         window.display();
 
     }

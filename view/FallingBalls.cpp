@@ -21,12 +21,20 @@ void FallingBalls::update() {
     for(auto it = balls.begin(); it != balls.end(); ++it) {
         Ball& ball = **it;
         if(ball.getIsFalling()) {
-            if(ball.getFallingSpeed() != 1) {
-                ball.setFallingSpeed(ball.getFallingSpeed()+0.001);
+            if(ball.getFallingSpeed() != ball.getMaxSpeed()) {
+                ball.setFallingSpeed(ball.getFallingSpeed()+0.0001);
             }
 
             ball.setPosition(sf::Vector2f(ball.getPosition().x, ball.getPosition().y + ball.getFallingSpeed()));
-            if(ball.getPosition().y > 610) ball.setIsFalling(false);
         }
     }
+}
+
+bool FallingBalls::handleCollision(Collider& otherCollider) {
+    for(auto it = balls.begin(); it != balls.end(); ++it) {
+        Ball& ball = **it;
+        if(ball.getCollider().checkCollision(otherCollider, 0))
+            ball.setIsFalling(false);
+    }
+    return false;
 }
