@@ -1,5 +1,5 @@
 #include "Collider.hpp"
-#include <iostream>
+#include <iostream> // TEMP
 
 Collider::Collider(sf::Transformable &body)
     : body(body), size() {

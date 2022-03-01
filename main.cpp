@@ -79,11 +79,12 @@ int main()
     matchTotalText.setPrimary(sf::Color::Yellow);
 
 
-    GameBoard gameBoard = GameBoard(sf::Vector2f(10, 40));
+    GameBoard gameBoard = GameBoard(sf::Vector2f(10, 40), 100);
 
     // Logical variables
     GameStateSingleton &gameState = GameStateSingleton::getInstance();
-
+    sf::Clock clock;
+    sf::Time time;
     // Game loop
     while (window.isOpen())
     {
@@ -143,11 +144,16 @@ int main()
             }
         }
         window.clear(sf::Color::Black);
+        
+        // Texts
         creditsText.update();
         creditsInsertedTotalText.update();
         creditsRemovedTotalText.update();
         matchTotalText.update();
-        gameBoard.update();
+        time = clock.restart();
+        // std::cout << time.asMicroseconds() << std::endl; // TEMP
+        gameBoard.update(time.asMicroseconds());
+        
         window.draw(gameBoard);
         window.draw(creditsInsertedTotalText);
         window.draw(creditsRemovedTotalText);

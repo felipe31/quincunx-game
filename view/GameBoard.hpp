@@ -11,11 +11,12 @@ private:
     DottedField dottedField;
     FallingBalls fallingBalls;
     Collider groundCollider;
+    int64_t animationTime, totalElapsed; // in microseconds
 
 public:
-    GameBoard(sf::Vector2f boardPosition);
+    GameBoard(sf::Vector2f boardPosition, int64_t animationTime);
     ~GameBoard(){};
-    void update();
+    void update(int64_t elapsed);
     virtual void draw(sf::RenderTarget &window, sf::RenderStates state) const;
 
 };

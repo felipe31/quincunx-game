@@ -1,7 +1,8 @@
 #include "GameBoard.hpp"
-
-GameBoard::GameBoard(sf::Vector2f boardPosition)
-    : boardPosition(boardPosition), gameBoard(sf::Vector2f(940.f, 600.f)), dottedField(), groundCollider(ground){
+#include <iostream> // TEMP
+GameBoard::GameBoard(sf::Vector2f boardPosition, int64_t animationTime)
+    : boardPosition(boardPosition), gameBoard(sf::Vector2f(940.f, 600.f)), dottedField(),
+        groundCollider(ground), totalElapsed(0), animationTime(animationTime) {
 
     // Board outline
     gameBoard.setFillColor(sf::Color::Transparent);
@@ -41,11 +42,14 @@ void GameBoard::draw(sf::RenderTarget &window, sf::RenderStates state) const {
     window.draw(gameBoard);
     dottedField.drawDots(window);
     fallingBalls.drawBalls(window);
-    window.draw(ground); // TEMP
 }
 
-void GameBoard::update() {
-    fallingBalls.update();
-    fallingBalls.handleCollision(groundCollider);
+void GameBoard::update(int64_t elapsed) {
+    totalElapsed += elapsed;
+    if (totalElapsed > animationTime) {
+        fallingBalls.update();
+        fallingBalls.handleCollision(groundCollider);
+        totalElapsed -= animationTime;
+    }
 }
 
