@@ -81,7 +81,7 @@ int main()
     matchTotalText.setPrimary(sf::Color::Yellow);
 
 
-    GameBoard gameBoard = GameBoard(sf::Vector2f(10, 40), 1000, 5000);
+    GameBoard gameBoard = GameBoard(sf::Vector2f(10, 40), 1000, 50000);
 
     Text2Fields pausedText("press space to continue", "paused",
     sf::Vector2f(window.getSize().x / 2 - 110, window.getSize().y / 2 - 70 + 50),
