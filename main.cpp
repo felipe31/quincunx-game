@@ -1,11 +1,11 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include <string>
-#include "./view/Text2Fields.hpp"
+#include "./model/Text2Fields.hpp"
 #include "./model/GameStateSingleton.hpp"
+#include "./model/ConfigSingleton.hpp"
 #include "./view/GameBoard.hpp"
 
-int BALLS_AMOUNT = 50;
 
 std::string creditsCurrentUpdater() {
     GameStateSingleton &gameState = GameStateSingleton::getInstance();
@@ -35,48 +35,46 @@ int main()
     int bottomTextY = 655;
     int topTextY = 5;
 
-    sf::Font fontCasino;
-    sf::Font fontCasinoFlatItalic;
-    if (!fontCasino.loadFromFile("./res/fonts/ChicagoFlat.ttf")
-        || !fontCasinoFlatItalic.loadFromFile("./res/fonts/ChicagoFlat-Italic.ttf"))
-        std::cout << "Error while loading fonts\n";
+    ConfigSingleton& configs = ConfigSingleton::getInstance();
+    sf::Font& primaryFont = configs.getPrimaryFont();
+    sf::Font& secondaryFont = configs.getSecondaryFont();
 
     Text2Fields startText("Press spacebar to", "Start",
         sf::Vector2f(50, bottomTextY), sf::Vector2f(50, bottomTextY + 10),
-        fontCasinoFlatItalic, fontCasino);
+        secondaryFont, primaryFont);
 
     Text2Fields creditsInText("Press q to", "Credits In",
         sf::Vector2f(245, bottomTextY), sf::Vector2f(245, bottomTextY + 10),
-        fontCasinoFlatItalic, fontCasino);
+        secondaryFont, primaryFont);
 
 
     Text2Fields creditsOutText("Press w to", "Credits Out",
         sf::Vector2f(500, bottomTextY), sf::Vector2f(500, bottomTextY + 10),
-        fontCasinoFlatItalic, fontCasino);
+        secondaryFont, primaryFont);
 
 
     Text2Fields creditsText("Credits", "0",
         sf::Vector2f(800, bottomTextY), sf::Vector2f(800, bottomTextY + 10),
-        fontCasinoFlatItalic, fontCasino);
+        secondaryFont, primaryFont);
 
     creditsText.setMainStringUpdater(creditsCurrentUpdater);
     creditsText.setPrimary(sf::Color::Yellow);
 
     Text2Fields creditsInsertedTotalText("Total inserted:", "0",
         sf::Vector2f(10, topTextY), sf::Vector2f(150, topTextY),
-        fontCasinoFlatItalic, fontCasino, 18, 18);
+        secondaryFont, primaryFont, 18, 18);
     creditsInsertedTotalText.setMainStringUpdater(creditsInsertedTotalUpdater);
     creditsInsertedTotalText.setPrimary(sf::Color::Yellow);
 
     Text2Fields creditsRemovedTotalText("Total removed:", "0",
         sf::Vector2f(400, topTextY), sf::Vector2f(540, topTextY),
-        fontCasinoFlatItalic, fontCasino, 18, 18);
+        secondaryFont, primaryFont, 18, 18);
     creditsRemovedTotalText.setMainStringUpdater(creditsRemovedUpdater);
     creditsRemovedTotalText.setPrimary(sf::Color::Yellow);
     
     Text2Fields matchTotalText("Matches played:", "0",
         sf::Vector2f(770, topTextY), sf::Vector2f(920, topTextY),
-        fontCasinoFlatItalic, fontCasino, 18, 18);
+        secondaryFont, primaryFont, 18, 18);
     matchTotalText.setMainStringUpdater(matchesPlayedUpdater);
     matchTotalText.setPrimary(sf::Color::Yellow);
 
@@ -86,12 +84,12 @@ int main()
     Text2Fields pausedText("press space to continue", "paused",
     sf::Vector2f(window.getSize().x / 2 - 110, window.getSize().y / 2 - 70 + 50),
     sf::Vector2f(window.getSize().x / 2 - 80, window.getSize().y / 2 - 70),
-    fontCasinoFlatItalic, fontCasino);
+    secondaryFont, primaryFont);
 
-    Text2Fields finishedText("your credits were updated", "FINISHED!",
+    Text2Fields finishedText("Press space to restart", "FINISHED",
     sf::Vector2f(window.getSize().x / 2 - 110, window.getSize().y / 2 - 70 + 50),
-    sf::Vector2f(window.getSize().x / 2 - 80, window.getSize().y / 2 - 70),
-    fontCasinoFlatItalic, fontCasino);
+    sf::Vector2f(window.getSize().x / 2 - 100, window.getSize().y / 2 - 70),
+    secondaryFont, primaryFont);
     
 
 
@@ -160,7 +158,7 @@ int main()
                             isPaused = false;
                             isFinished = false;
                             clock.restart();
-                            gameBoard.startGame(BALLS_AMOUNT);
+                            gameBoard.startGame(configs.getBallsAmount());
                         }
                     }
 
@@ -189,7 +187,7 @@ int main()
             if(!isPaused) {
                 time = clock.restart();
                 gameBoard.update(time.asMicroseconds());
-                if(gameBoard.isGameFinished()) {
+                if(gameBoard.getIsGameFinished()) {
                     isRunningGame = false;
                     isFinished = true;
                 }

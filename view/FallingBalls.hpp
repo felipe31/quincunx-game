@@ -3,7 +3,8 @@
 #include <vector>
 #include <memory>
 #include "../model/Ball.hpp"
-#include "DottedField.hpp"
+#include "../model/DottedField.hpp"
+#include "../model/PrizeBox.hpp"
 
 class FallingBalls {
 private:
@@ -18,4 +19,5 @@ public:
     void handleDotsCollision(DottedField& dottedField);
     bool isAnyBallFalling();
     int countBalls();
+    int countPoints(std::vector<PrizeBox> prizeBoxes);
 };

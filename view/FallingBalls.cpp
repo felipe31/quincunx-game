@@ -70,3 +70,23 @@ bool FallingBalls::isAnyBallFalling() {
 int FallingBalls::countBalls() {
     return balls.size();
 }
+
+int FallingBalls::countPoints(std::vector<PrizeBox> prizeBoxes) {
+    int points = 0;
+
+    for(auto it = balls.begin(); it != balls.end(); ++it) {
+        Ball& ball = **it;
+        // Check which box the current ball is above
+        // It considers the center of the ball only!
+        for(auto itBox = prizeBoxes.begin(); itBox != prizeBoxes.end(); ++itBox) {
+            PrizeBox& box = *itBox;
+            if (ball.getPosition().x + ball.getRadius() >= box.getPosition().x
+                && ball.getPosition().x + ball.getRadius() <= box.getPosition().x + box.getSize().x) {
+                points += box.getPrize();
+
+            }
+        } 
+    }
+
+    return points;
+}

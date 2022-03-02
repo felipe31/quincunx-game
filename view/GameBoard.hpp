@@ -1,6 +1,7 @@
 #pragma once
 #include <SFML/Graphics.hpp>
-#include "DottedField.hpp"
+#include "../model/DottedField.hpp"
+#include "../model/PrizeBox.hpp"
 #include "FallingBalls.hpp"
 #include "../controller/Collider.hpp"
 
@@ -14,6 +15,11 @@ private:
     int64_t animationTime, animationElapsed, creationElapsed, ballCreationInterval; // in microseconds
     std::vector<sf::Color> ballColors;
     int ballsAmount;
+    std::vector<PrizeBox> prizeBoxes;
+    bool isGameFinished;
+
+    bool checkGameFinished();
+    void updateCredits();
 
 public:
     GameBoard(sf::Vector2f boardPosition, int64_t animationTime, int64_t ballCreationInterval);
@@ -21,5 +27,6 @@ public:
     void update(int64_t elapsed);
     virtual void draw(sf::RenderTarget &window, sf::RenderStates state) const;
     void startGame(int amount);
-    bool isGameFinished();
+    void createPrizeBoxes();
+    bool getIsGameFinished();
 };
