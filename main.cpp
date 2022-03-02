@@ -79,10 +79,18 @@ int main()
     matchTotalText.setPrimary(sf::Color::Yellow);
 
 
-    GameBoard gameBoard = GameBoard(sf::Vector2f(10, 40), 100);
+    GameBoard gameBoard = GameBoard(sf::Vector2f(10, 40), 1000);
+
+    Text2Fields pausedText("press space to continue", "paused",
+    sf::Vector2f(window.getSize().x / 2 - 110, window.getSize().y / 2 - 70 + 50),
+    sf::Vector2f(window.getSize().x / 2 - 80, window.getSize().y / 2 - 70),
+    fontCasinoFlatItalic, fontCasino);
+    
+
 
     // Logical variables
     GameStateSingleton &gameState = GameStateSingleton::getInstance();
+    bool isPaused = false, isRunningGame = false;
     sf::Clock clock;
     sf::Time time;
     // Game loop
@@ -138,6 +146,11 @@ int main()
                         gameState.setCreditsCurrent(gameState.getCreditsCurrent() - 1);
                         gameState.setMatchCount(gameState.getMatchCount() + 1);
                     }
+                    if (isRunningGame) {
+                        isPaused = isPaused ? false : true;
+                    } else {
+                        isRunningGame = true;
+                    }
                     break;
                 }
                 break;
@@ -152,8 +165,6 @@ int main()
         matchTotalText.update();
         time = clock.restart();
         // std::cout << time.asMicroseconds() << std::endl; // TEMP
-        gameBoard.update(time.asMicroseconds());
-        
         window.draw(gameBoard);
         window.draw(creditsInsertedTotalText);
         window.draw(creditsRemovedTotalText);
@@ -162,6 +173,14 @@ int main()
         window.draw(creditsText);
         window.draw(creditsInText);
         window.draw(creditsOutText);
+        if(isRunningGame) {
+            if(!isPaused)
+                gameBoard.update(time.asMicroseconds());
+            else {
+                window.draw(pausedText);
+            }
+
+        }
         window.display();
 
     }

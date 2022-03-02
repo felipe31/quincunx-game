@@ -4,7 +4,7 @@
 
 class Ball : public sf::CircleShape {
 private:
-    float fallingSpeed, maxSpeed; // 1 means it reached max speed
+    float fallingSpeed, maxSpeed, direction, lastCollisionY;
     bool isFalling;
 
 public:
@@ -20,4 +20,10 @@ public:
     
     void setMaxSpeed(float speed);
     float getMaxSpeed();
+
+    float getDirection();
+    void setDirection(float newDirection);
+
+    float getLastCollisionY();
+    void setLastCollisionY(float newCollision);
 };

@@ -1,4 +1,5 @@
 #include "GameBoard.hpp"
+#include <functional>
 #include <iostream> // TEMP
 GameBoard::GameBoard(sf::Vector2f boardPosition, int64_t animationTime)
     : boardPosition(boardPosition), gameBoard(sf::Vector2f(940.f, 600.f)), dottedField(),
@@ -32,8 +33,8 @@ GameBoard::GameBoard(sf::Vector2f boardPosition, int64_t animationTime)
     fallingBalls.addBall(sf::Vector2f(boardPosition.x + gameBoard.getSize().x/2, boardPosition.y), sf::Color::Cyan);
     fallingBalls.addBall(sf::Vector2f(boardPosition.x + gameBoard.getSize().x/2 - 80, boardPosition.y), sf::Color::White);
     fallingBalls.addBall(sf::Vector2f(boardPosition.x + gameBoard.getSize().x/2 - 140, boardPosition.y), sf::Color::Blue);
-    fallingBalls.addBall(sf::Vector2f(-50, boardPosition.y), sf::Color::Red);
-    fallingBalls.addBall(sf::Vector2f(930, boardPosition.y), sf::Color::Green);
+    fallingBalls.addBall(sf::Vector2f(200, boardPosition.y), sf::Color::Red);
+    fallingBalls.addBall(sf::Vector2f(800, boardPosition.y), sf::Color::Green);
 
 }
 
@@ -42,6 +43,7 @@ void GameBoard::draw(sf::RenderTarget &window, sf::RenderStates state) const {
     window.draw(gameBoard);
     dottedField.drawDots(window);
     fallingBalls.drawBalls(window);
+    window.draw(ground);
 }
 
 void GameBoard::update(int64_t elapsed) {
@@ -49,7 +51,7 @@ void GameBoard::update(int64_t elapsed) {
     if (totalElapsed > animationTime) {
         fallingBalls.update();
         fallingBalls.handleCollision(groundCollider);
+        fallingBalls.handleDotsCollision(dottedField);
         totalElapsed -= animationTime;
     }
 }
-

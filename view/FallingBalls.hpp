@@ -3,6 +3,7 @@
 #include <vector>
 #include <memory>
 #include "../model/Ball.hpp"
+#include "DottedField.hpp"
 
 class FallingBalls {
 private:
@@ -13,5 +14,6 @@ public:
     void addBall(sf::Vector2f position, sf::Color color);
     void drawBalls(sf::RenderTarget &window) const;
     void update();
-    bool handleCollision(Collider& otherCollider);
+    void handleCollision(Collider& otherCollider);
+    void handleDotsCollision(DottedField& dottedField);
 };

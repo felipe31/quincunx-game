@@ -1,6 +1,8 @@
 #include "FallingBalls.hpp"
+#include <ctime>
 
-FallingBalls::FallingBalls(/* args */) {
+FallingBalls::FallingBalls() {
+    std::srand( ( unsigned int )std::time( nullptr ) );
 }
 
 FallingBalls::~FallingBalls() {
@@ -25,16 +27,33 @@ void FallingBalls::update() {
                 ball.setFallingSpeed(ball.getFallingSpeed()+0.0001);
             }
 
-            ball.setPosition(sf::Vector2f(ball.getPosition().x, ball.getPosition().y + ball.getFallingSpeed()));
+            ball.setPosition(sf::Vector2f(ball.getPosition().x + ball.getDirection(), ball.getPosition().y + ball.getFallingSpeed()));
         }
     }
 }
 
-bool FallingBalls::handleCollision(Collider& otherCollider) {
+void FallingBalls::handleCollision(Collider& otherCollider) {
     for(auto it = balls.begin(); it != balls.end(); ++it) {
         Ball& ball = **it;
-        if(ball.getCollider().checkCollision(otherCollider, 0))
+        if(ball.getCollider().checkCollision(otherCollider))
             ball.setIsFalling(false);
     }
-    return false;
 }
+
+void FallingBalls::handleDotsCollision(DottedField& dottedField) {
+    for(auto it = balls.begin(); it != balls.end(); ++it) {
+        Ball& ball = **it;
+        if(ball.getLastCollisionY() < ball.getPosition().y - 25) {
+            if(dottedField.checkDotsCollision(ball.getCollider())) {
+                ball.setLastCollisionY(ball.getPosition().y);
+                // Randomly changes the ball's direction
+                if(((std::rand() %2)+1)%2) {
+                    ball.setDirection(-0.2);
+                } else
+                    ball.setDirection(0.2);
+
+            }
+        }
+    }
+}
+

@@ -18,5 +18,4 @@ public:
     ~GameBoard(){};
     void update(int64_t elapsed);
     virtual void draw(sf::RenderTarget &window, sf::RenderStates state) const;
-
 };

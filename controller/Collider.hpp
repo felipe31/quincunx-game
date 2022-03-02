@@ -9,7 +9,7 @@ public:
     Collider(sf::Transformable& body);
     ~Collider();
 
-    bool checkCollision(Collider& other, float push);
+    bool checkCollision(Collider& other);
     sf::Vector2f getPosition();
     sf::Vector2f getHalfSize();
     void move(float dx, float dy);

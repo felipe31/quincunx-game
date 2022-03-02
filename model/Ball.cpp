@@ -4,7 +4,9 @@ Ball::Ball(sf::Vector2f position, sf::Color color) {
     fallingSpeed = 0;
     maxSpeed = 0.5;
     isFalling = true;
-    setRadius(40);    
+    direction = 0;
+    setRadius(38);    
+    lastCollisionY = getRadius() * -1;
     setFillColor(color);
     setPosition(position);
 }
@@ -41,4 +43,19 @@ float Ball::getMaxSpeed() {
 
 void Ball::setMaxSpeed(float speed) {
     maxSpeed = speed;
+}
+
+float Ball::getDirection() {
+    return direction;
+}
+void Ball::setDirection(float newDirection) {
+    direction = newDirection;
+}
+
+
+float Ball::getLastCollisionY() {
+    return lastCollisionY;
+}
+void Ball::setLastCollisionY(float newCollision) {
+    lastCollisionY = newCollision;
 }

@@ -1,5 +1,4 @@
 #include "DottedField.hpp"
-#include <iostream>
 #include <string>
 
 DottedField::DottedField(sf::Vector2f start, sf::Vector2f end, float spacing) {
@@ -21,7 +20,7 @@ void DottedField::drawDots(sf::RenderTarget &window) const {
 }
 
 std::shared_ptr<sf::CircleShape> DottedField::createDot(sf::Vector2f position) {
-    std::shared_ptr<sf::CircleShape> circle = std::make_shared<sf::CircleShape>(5);
+    std::shared_ptr<sf::CircleShape> circle = std::make_shared<sf::CircleShape>(3);
     (*circle).setPosition(position);
     (*circle).setFillColor(sf::Color::White);
     return circle;
@@ -39,12 +38,10 @@ void DottedField::createDottedField(sf::Vector2f start, sf::Vector2f end, float 
     int columns = 0.5 + (end.x - start.x) / spacing;
 
     int evenOddLine = 0;
-    dotMatrix = std::vector<std::vector<std::shared_ptr<sf::Drawable>>>();
-    std::cout << "Columns: " << columns << " Rows: " << rows << "\n"; 
+    dotMatrix = std::vector<std::vector<std::shared_ptr<sf::CircleShape>>>();
     for (int i = 0; i < rows; ++i) {
-            dotMatrix.push_back(std::vector<std::shared_ptr<sf::Drawable>>(columns));
+            dotMatrix.push_back(std::vector<std::shared_ptr<sf::CircleShape>>(columns));
         for (int j = 0; j < columns; ++j) {
-            sf::CircleShape cirecle(10);
             if (i%2 != 0) {
                 evenOddLine = spacing/2;
             } else {
@@ -55,4 +52,21 @@ void DottedField::createDottedField(sf::Vector2f start, sf::Vector2f end, float 
 
         }
     }
+}
+
+bool DottedField::checkDotsCollision(Collider other) {
+    int i = 0;
+    for (auto itI = dotMatrix.begin(); itI != dotMatrix.end(); ++itI) {
+        for (auto itJ = (*itI).begin(); itJ != (*itI).end(); ++itJ) {
+            sf::CircleShape& dot = **itJ;
+            Collider dotCollider(dot);
+
+            // checkCollision MUST be called from "other"
+            // otherwise, the dots will be moved in case of collision
+            if (other.checkCollision(dotCollider)) {
+                return true;
+            }
+        }
+    }
+    return false;
 }

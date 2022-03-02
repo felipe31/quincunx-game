@@ -14,6 +14,10 @@ Text2Fields::Text2Fields(std::string preString, std::string mainString,
     mainText.setPosition(mainPosition);
     preText.setFillColor(primary);
     mainText.setFillColor(primary);
+    preText.setOutlineThickness(2);
+    preText.setOutlineColor(sf::Color::Black);
+    mainText.setOutlineThickness(2);
+    mainText.setOutlineColor(sf::Color::Black);
 }
 
 Text2Fields::~Text2Fields() {
