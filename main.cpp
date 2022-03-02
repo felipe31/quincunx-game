@@ -6,12 +6,11 @@
 #include "./model/ConfigSingleton.hpp"
 #include "./view/GameBoard.hpp"
 
-
+// Helpers
 std::string creditsCurrentUpdater() {
     GameStateSingleton &gameState = GameStateSingleton::getInstance();
     return std::to_string(gameState.getCreditsCurrent());
 }
-
 
 std::string creditsInsertedTotalUpdater() {
     GameStateSingleton &gameState = GameStateSingleton::getInstance();
@@ -31,14 +30,16 @@ int main()
 {   
     sf::RenderWindow window(sf::VideoMode(960, 720), "Quincunx Game", sf::Style::Titlebar | sf::Style::Close);
 
-
-    int bottomTextY = 655;
-    int topTextY = 5;
-
     ConfigSingleton& configs = ConfigSingleton::getInstance();
     sf::Font& primaryFont = configs.getPrimaryFont();
     sf::Font& secondaryFont = configs.getSecondaryFont();
 
+    // Create board
+    GameBoard gameBoard = GameBoard(sf::Vector2f(10, 40), 1000, 50000);
+
+    // Bottom texts and buttons
+    int bottomTextY = 655;
+    int topTextY = 5;
     Text2Fields startText("Press spacebar to", "Start",
         sf::Vector2f(50, bottomTextY), sf::Vector2f(50, bottomTextY + 10),
         secondaryFont, primaryFont);
@@ -60,6 +61,8 @@ int main()
     creditsText.setMainStringUpdater(creditsCurrentUpdater);
     creditsText.setPrimary(sf::Color::Yellow);
 
+
+    // Top texts and credits
     Text2Fields creditsInsertedTotalText("Total inserted:", "0",
         sf::Vector2f(10, topTextY), sf::Vector2f(150, topTextY),
         secondaryFont, primaryFont, 18, 18);
@@ -79,8 +82,7 @@ int main()
     matchTotalText.setPrimary(sf::Color::Yellow);
 
 
-    GameBoard gameBoard = GameBoard(sf::Vector2f(10, 40), 1000, 50000);
-
+    // Pause and finish texts
     Text2Fields pausedText("press space to continue", "paused",
     sf::Vector2f(window.getSize().x / 2 - 110, window.getSize().y / 2 - 70 + 50),
     sf::Vector2f(window.getSize().x / 2 - 80, window.getSize().y / 2 - 70),
@@ -90,14 +92,13 @@ int main()
     sf::Vector2f(window.getSize().x / 2 - 110, window.getSize().y / 2 - 70 + 50),
     sf::Vector2f(window.getSize().x / 2 - 100, window.getSize().y / 2 - 70),
     secondaryFont, primaryFont);
-    
-
 
     // Logical variables
     GameStateSingleton &gameState = GameStateSingleton::getInstance();
     bool isPaused = false, isRunningGame = false, isFinished = false;
     sf::Clock clock;
     sf::Time time;
+
     // Game loop
     while (window.isOpen())
     {
@@ -148,7 +149,7 @@ int main()
                 case sf::Keyboard::Space:
                     startText.FillColorPrimary();
                     if (isRunningGame) {
-                        isPaused = isPaused ? false : true;
+                        isPaused = !isPaused;
                         clock.restart();
                     } else if (gameState.getCreditsCurrent() > 0) {
                         gameState.setCreditsCurrent(gameState.getCreditsCurrent() - 1);
@@ -169,7 +170,6 @@ int main()
         }
         window.clear(sf::Color::Black);
 
-        // Texts
         creditsText.update();
         creditsInsertedTotalText.update();
         creditsRemovedTotalText.update();
@@ -183,6 +183,7 @@ int main()
         window.draw(creditsText);
         window.draw(creditsInText);
         window.draw(creditsOutText);
+
         if(isRunningGame) {
             if(!isPaused) {
                 time = clock.restart();

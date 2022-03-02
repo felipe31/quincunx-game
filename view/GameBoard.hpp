@@ -2,7 +2,7 @@
 #include <SFML/Graphics.hpp>
 #include "../model/DottedField.hpp"
 #include "../model/PrizeBox.hpp"
-#include "FallingBalls.hpp"
+#include "../controller/FallingBalls.hpp"
 #include "../controller/Collider.hpp"
 
 class GameBoard: public sf::Drawable {
@@ -20,6 +20,7 @@ private:
 
     bool checkGameFinished();
     void updateCredits();
+    void createPrizeBoxes();
 
 public:
     GameBoard(sf::Vector2f boardPosition, int64_t animationTime, int64_t ballCreationInterval);
@@ -27,6 +28,5 @@ public:
     void update(int64_t elapsed);
     virtual void draw(sf::RenderTarget &window, sf::RenderStates state) const;
     void startGame(int amount);
-    void createPrizeBoxes();
     bool getIsGameFinished();
 };

@@ -5,7 +5,7 @@ ConfigSingleton *ConfigSingleton::instance = 0;
 
 
 ConfigSingleton::ConfigSingleton() {
-    ballsAmount = 20;
+    ballsAmount = 10;
     if (!primaryFont.loadFromFile("./res/fonts/ChicagoFlat.ttf")
         || !secondaryFont.loadFromFile("./res/fonts/ChicagoFlat-Italic.ttf"))
         std::cout << "Error while loading fonts\n";

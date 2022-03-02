@@ -5,6 +5,8 @@ PrizeBox::PrizeBox(int prize, sf::Font& font, sf::Vector2f position, sf::Vector2
 
     rectangle.setPosition(position);
     rectangle.setFillColor(color);
+
+    // Set position to the middle of the rectangle
     text.setPosition(sf::Vector2f(position.x + size.x/2 - std::to_string(prize).size()/2 * text.getCharacterSize()/2,
         position.y + size.y/2 - text.getCharacterSize()/2 - text.getCharacterSize()/6));
     text.setFillColor(sf::Color::Yellow);

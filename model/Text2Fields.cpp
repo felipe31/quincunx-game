@@ -8,6 +8,7 @@ Text2Fields::Text2Fields(std::string preString, std::string mainString,
     : preText(sf::Text(preString, preFont, preSize)),
       mainText(sf::Text(mainString, mainFont, mainSize)),
       prePosition(prePosition), mainPosition(mainPosition), isMainStringUpdater(false) {
+
     primary = sf::Color::Red;
     secondary = sf::Color::Magenta;
     preText.setPosition(prePosition);

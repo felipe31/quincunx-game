@@ -2,6 +2,7 @@
 #include <functional>
 #include "../model/ConfigSingleton.hpp"
 #include "../model/GameStateSingleton.hpp"
+
 GameBoard::GameBoard(sf::Vector2f boardPosition, int64_t animationTime, int64_t ballCreationInterval)
     : boardPosition(boardPosition), gameBoard(sf::Vector2f(940.f, 600.f)), dottedField(), creationElapsed(0),
         groundCollider(ground), animationElapsed(0), animationTime(animationTime), ballsAmount(0),
@@ -31,7 +32,6 @@ GameBoard::GameBoard(sf::Vector2f boardPosition, int64_t animationTime, int64_t 
 
     // Prizes
     createPrizeBoxes();
-    
 
     // Ball color options
     ballColors.push_back(sf::Color::Blue);
@@ -39,8 +39,6 @@ GameBoard::GameBoard(sf::Vector2f boardPosition, int64_t animationTime, int64_t 
     ballColors.push_back(sf::Color::Magenta);
     ballColors.push_back(sf::Color::White);
     ballColors.push_back(sf::Color::Red);
-
-
 }
 
 
@@ -48,6 +46,7 @@ void GameBoard::draw(sf::RenderTarget &window, sf::RenderStates state) const {
     window.draw(gameBoard);
     dottedField.drawDots(window);
     fallingBalls.drawBalls(window);
+
     for (int i = 0; i < prizeBoxes.size(); i++) {
         window.draw(prizeBoxes[i]);
     }
@@ -57,6 +56,8 @@ void GameBoard::draw(sf::RenderTarget &window, sf::RenderStates state) const {
 void GameBoard::update(int64_t elapsed) {
     animationElapsed += elapsed;
     creationElapsed += elapsed;
+
+    // Handle ball creation
     if (creationElapsed > ballCreationInterval) {
         if(ballsAmount > 0) {
             fallingBalls.addBall(sf::Vector2f(boardPosition.x + gameBoard.getSize().x/2 - 20, boardPosition.y),
@@ -65,6 +66,8 @@ void GameBoard::update(int64_t elapsed) {
         }
         creationElapsed -= ballCreationInterval;
     }
+
+    // Handle ball animation
     if (animationElapsed > animationTime) {
         fallingBalls.update();
         fallingBalls.handleCollision(groundCollider);
@@ -72,14 +75,13 @@ void GameBoard::update(int64_t elapsed) {
         animationElapsed -= animationTime;
     }
 
+    // Check if the game has finished
     if (!isGameFinished) {
         isGameFinished = checkGameFinished();
         if(isGameFinished) {
             updateCredits();
         }
-
     }
-
 }
 
 void GameBoard::startGame(int amount) {
@@ -92,6 +94,7 @@ bool GameBoard::getIsGameFinished() {
     return isGameFinished;
 }
 
+// Private methods
 bool GameBoard::checkGameFinished() {
     if (fallingBalls.countBalls() > 0)
         return !fallingBalls.isAnyBallFalling();

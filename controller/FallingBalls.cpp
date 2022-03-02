@@ -27,7 +27,8 @@ void FallingBalls::update() {
                 ball.setFallingSpeed(ball.getFallingSpeed()+0.00025);
             }
 
-            ball.setPosition(sf::Vector2f(ball.getPosition().x + ball.getDirection(), ball.getPosition().y + ball.getFallingSpeed()));
+            ball.setPosition(sf::Vector2f(ball.getPosition().x + ball.getDirection(),
+                ball.getPosition().y + ball.getFallingSpeed()));
         }
     }
 }
@@ -43,11 +44,13 @@ void FallingBalls::handleCollision(Collider& otherCollider) {
 void FallingBalls::handleDotsCollision(DottedField& dottedField) {
     for(auto it = balls.begin(); it != balls.end(); ++it) {
         Ball& ball = **it;
-        if(ball.getLastCollisionY() < ball.getPosition().y - 25) {
-            if(dottedField.checkDotsCollision(ball.getCollider())) {
+
+        if (ball.getLastCollisionY() < ball.getPosition().y - 25) {
+            if (dottedField.checkDotsCollision(ball.getCollider())) {
                 ball.setLastCollisionY(ball.getPosition().y);
+
                 // Randomly changes the ball's direction
-                if(((std::rand() %2)+1)%2) {
+                if (((std::rand() %2)+1)%2) {
                     ball.setDirection(-0.2);
                 } else
                     ball.setDirection(0.2);
@@ -58,9 +61,9 @@ void FallingBalls::handleDotsCollision(DottedField& dottedField) {
 }
 
 bool FallingBalls::isAnyBallFalling() {
-    for(auto it = balls.begin(); it != balls.end(); ++it) {
+    for (auto it = balls.begin(); it != balls.end(); ++it) {
         Ball& ball = **it;
-        if(ball.getIsFalling()) {
+        if (ball.getIsFalling()) {
             return true;
         }
     }
@@ -74,11 +77,11 @@ int FallingBalls::countBalls() {
 int FallingBalls::countPoints(std::vector<PrizeBox> prizeBoxes) {
     int points = 0;
 
-    for(auto it = balls.begin(); it != balls.end(); ++it) {
+    for (auto it = balls.begin(); it != balls.end(); ++it) {
         Ball& ball = **it;
         // Check which box the current ball is above
         // It considers the center of the ball only!
-        for(auto itBox = prizeBoxes.begin(); itBox != prizeBoxes.end(); ++itBox) {
+        for (auto itBox = prizeBoxes.begin(); itBox != prizeBoxes.end(); ++itBox) {
             PrizeBox& box = *itBox;
             if (ball.getPosition().x + ball.getRadius() >= box.getPosition().x
                 && ball.getPosition().x + ball.getRadius() <= box.getPosition().x + box.getSize().x) {
