@@ -4,13 +4,3 @@ all:
 
 run: all
 	./bin/game &
-
-
-test-build:
-	cmake -S . -B build
-	cmake --build build
-
-test-run:
-	cd build && ctest
-
-test: test-build test-run
