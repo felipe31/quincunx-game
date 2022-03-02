@@ -11,11 +11,15 @@ private:
     DottedField dottedField;
     FallingBalls fallingBalls;
     Collider groundCollider;
-    int64_t animationTime, totalElapsed; // in microseconds
+    int64_t animationTime, animationElapsed, creationElapsed, ballCreationInterval; // in microseconds
+    std::vector<sf::Color> ballColors;
+    int ballsAmount;
 
 public:
-    GameBoard(sf::Vector2f boardPosition, int64_t animationTime);
+    GameBoard(sf::Vector2f boardPosition, int64_t animationTime, int64_t ballCreationInterval);
     ~GameBoard(){};
     void update(int64_t elapsed);
     virtual void draw(sf::RenderTarget &window, sf::RenderStates state) const;
+    void startGame(int amount);
+    bool isGameFinished();
 };

@@ -16,4 +16,6 @@ public:
     void update();
     void handleCollision(Collider& otherCollider);
     void handleDotsCollision(DottedField& dottedField);
+    bool isAnyBallFalling();
+    int countBalls();
 };

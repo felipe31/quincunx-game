@@ -24,7 +24,7 @@ void FallingBalls::update() {
         Ball& ball = **it;
         if(ball.getIsFalling()) {
             if(ball.getFallingSpeed() != ball.getMaxSpeed()) {
-                ball.setFallingSpeed(ball.getFallingSpeed()+0.0001);
+                ball.setFallingSpeed(ball.getFallingSpeed()+0.00025);
             }
 
             ball.setPosition(sf::Vector2f(ball.getPosition().x + ball.getDirection(), ball.getPosition().y + ball.getFallingSpeed()));
@@ -57,3 +57,16 @@ void FallingBalls::handleDotsCollision(DottedField& dottedField) {
     }
 }
 
+bool FallingBalls::isAnyBallFalling() {
+    for(auto it = balls.begin(); it != balls.end(); ++it) {
+        Ball& ball = **it;
+        if(ball.getIsFalling()) {
+            return true;
+        }
+    }
+    return false;
+}
+
+int FallingBalls::countBalls() {
+    return balls.size();
+}

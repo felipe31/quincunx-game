@@ -1,9 +1,10 @@
 #include "GameBoard.hpp"
 #include <functional>
 #include <iostream> // TEMP
-GameBoard::GameBoard(sf::Vector2f boardPosition, int64_t animationTime)
-    : boardPosition(boardPosition), gameBoard(sf::Vector2f(940.f, 600.f)), dottedField(),
-        groundCollider(ground), totalElapsed(0), animationTime(animationTime) {
+GameBoard::GameBoard(sf::Vector2f boardPosition, int64_t animationTime, int64_t ballCreationInterval)
+    : boardPosition(boardPosition), gameBoard(sf::Vector2f(940.f, 600.f)), dottedField(), creationElapsed(0),
+        groundCollider(ground), animationElapsed(0), animationTime(animationTime), ballsAmount(0),
+        ballCreationInterval(ballCreationInterval) {
 
     // Board outline
     gameBoard.setFillColor(sf::Color::Transparent);
@@ -28,14 +29,11 @@ GameBoard::GameBoard(sf::Vector2f boardPosition, int64_t animationTime)
 
     groundCollider.setSize(ground.getSize());
 
-    // Falling Balls
-    // TODO: Move this section to a "start" function
-    fallingBalls.addBall(sf::Vector2f(boardPosition.x + gameBoard.getSize().x/2, boardPosition.y), sf::Color::Cyan);
-    fallingBalls.addBall(sf::Vector2f(boardPosition.x + gameBoard.getSize().x/2 - 80, boardPosition.y), sf::Color::White);
-    fallingBalls.addBall(sf::Vector2f(boardPosition.x + gameBoard.getSize().x/2 - 140, boardPosition.y), sf::Color::Blue);
-    fallingBalls.addBall(sf::Vector2f(200, boardPosition.y), sf::Color::Red);
-    fallingBalls.addBall(sf::Vector2f(800, boardPosition.y), sf::Color::Green);
-
+    ballColors.push_back(sf::Color::Blue);
+    ballColors.push_back(sf::Color::Green);
+    ballColors.push_back(sf::Color::Magenta);
+    ballColors.push_back(sf::Color::White);
+    ballColors.push_back(sf::Color::Red);
 }
 
 
@@ -47,11 +45,31 @@ void GameBoard::draw(sf::RenderTarget &window, sf::RenderStates state) const {
 }
 
 void GameBoard::update(int64_t elapsed) {
-    totalElapsed += elapsed;
-    if (totalElapsed > animationTime) {
+    animationElapsed += elapsed;
+    creationElapsed += elapsed;
+    if (creationElapsed > ballCreationInterval) {
+        if(ballsAmount > 0) {
+            fallingBalls.addBall(sf::Vector2f(boardPosition.x + gameBoard.getSize().x/2 - 20, boardPosition.y),
+            ballColors[ballsAmount%ballColors.size()]);
+            --ballsAmount;
+        }
+        creationElapsed -= ballCreationInterval;
+    }
+    if (animationElapsed > animationTime) {
         fallingBalls.update();
         fallingBalls.handleCollision(groundCollider);
         fallingBalls.handleDotsCollision(dottedField);
-        totalElapsed -= animationTime;
+        animationElapsed -= animationTime;
     }
+}
+
+void GameBoard::startGame(int amount) {
+    ballsAmount = amount;
+    fallingBalls = FallingBalls();
+};
+
+bool GameBoard::isGameFinished() {
+    if(fallingBalls.countBalls() > 0)
+        return !fallingBalls.isAnyBallFalling();
+    return false;
 }

@@ -5,6 +5,8 @@
 #include "./model/GameStateSingleton.hpp"
 #include "./view/GameBoard.hpp"
 
+int BALLS_AMOUNT = 50;
+
 std::string creditsCurrentUpdater() {
     GameStateSingleton &gameState = GameStateSingleton::getInstance();
     return std::to_string(gameState.getCreditsCurrent());
@@ -79,9 +81,14 @@ int main()
     matchTotalText.setPrimary(sf::Color::Yellow);
 
 
-    GameBoard gameBoard = GameBoard(sf::Vector2f(10, 40), 1000);
+    GameBoard gameBoard = GameBoard(sf::Vector2f(10, 40), 1000, 5000);
 
     Text2Fields pausedText("press space to continue", "paused",
+    sf::Vector2f(window.getSize().x / 2 - 110, window.getSize().y / 2 - 70 + 50),
+    sf::Vector2f(window.getSize().x / 2 - 80, window.getSize().y / 2 - 70),
+    fontCasinoFlatItalic, fontCasino);
+
+    Text2Fields finishedText("your credits were updated", "FINISHED!",
     sf::Vector2f(window.getSize().x / 2 - 110, window.getSize().y / 2 - 70 + 50),
     sf::Vector2f(window.getSize().x / 2 - 80, window.getSize().y / 2 - 70),
     fontCasinoFlatItalic, fontCasino);
@@ -90,7 +97,7 @@ int main()
 
     // Logical variables
     GameStateSingleton &gameState = GameStateSingleton::getInstance();
-    bool isPaused = false, isRunningGame = false;
+    bool isPaused = false, isRunningGame = false, isFinished = false;
     sf::Clock clock;
     sf::Time time;
     // Game loop
@@ -142,29 +149,34 @@ int main()
                     break;
                 case sf::Keyboard::Space:
                     startText.FillColorPrimary();
-                    if (gameState.getCreditsCurrent() > 0) {
-                        gameState.setCreditsCurrent(gameState.getCreditsCurrent() - 1);
-                        gameState.setMatchCount(gameState.getMatchCount() + 1);
-                    }
                     if (isRunningGame) {
                         isPaused = isPaused ? false : true;
-                    } else {
-                        isRunningGame = true;
+                        clock.restart();
+                    } else if (gameState.getCreditsCurrent() > 0) {
+                        gameState.setCreditsCurrent(gameState.getCreditsCurrent() - 1);
+                        gameState.setMatchCount(gameState.getMatchCount() + 1);
+                        if(!isRunningGame) {
+                            isRunningGame = true;
+                            isPaused = false;
+                            isFinished = false;
+                            clock.restart();
+                            gameBoard.startGame(BALLS_AMOUNT);
+                        }
                     }
+
                     break;
                 }
                 break;
             }
         }
         window.clear(sf::Color::Black);
-        
+
         // Texts
         creditsText.update();
         creditsInsertedTotalText.update();
         creditsRemovedTotalText.update();
         matchTotalText.update();
-        time = clock.restart();
-        // std::cout << time.asMicroseconds() << std::endl; // TEMP
+
         window.draw(gameBoard);
         window.draw(creditsInsertedTotalText);
         window.draw(creditsRemovedTotalText);
@@ -174,12 +186,19 @@ int main()
         window.draw(creditsInText);
         window.draw(creditsOutText);
         if(isRunningGame) {
-            if(!isPaused)
+            if(!isPaused) {
+                time = clock.restart();
                 gameBoard.update(time.asMicroseconds());
-            else {
+                if(gameBoard.isGameFinished()) {
+                    isRunningGame = false;
+                    isFinished = true;
+                }
+            } else {
                 window.draw(pausedText);
             }
-
+        }
+        if (isFinished) {
+            window.draw(finishedText);
         }
         window.display();
 
