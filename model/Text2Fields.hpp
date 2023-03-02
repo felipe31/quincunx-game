@@ -38,6 +38,6 @@ public:
 
     void setMainPosition(sf::Vector2f position);
     sf::Vector2f getMainPosition();
-    
+
     void setMainStringUpdater(std::function<std::string()> updater);
 };

@@ -50,7 +50,7 @@ void GameBoard::draw(sf::RenderTarget &window, sf::RenderStates state) const {
     for (int i = 0; i < prizeBoxes.size(); i++) {
         window.draw(prizeBoxes[i]);
     }
-    
+
 }
 
 void GameBoard::update(int64_t elapsed) {

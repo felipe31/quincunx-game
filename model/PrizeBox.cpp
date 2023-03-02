@@ -12,7 +12,7 @@ PrizeBox::PrizeBox(int prize, sf::Font& font, sf::Vector2f position, sf::Vector2
     text.setFillColor(sf::Color::Yellow);
     text.setOutlineThickness(5);
     text.setOutlineColor(sf::Color::Black);
-    
+
 }
 
 PrizeBox::~PrizeBox() {

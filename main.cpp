@@ -27,7 +27,7 @@ std::string matchesPlayedUpdater() {
     return std::to_string(gameState.getMatchCount());
 }
 int main()
-{   
+{
     sf::RenderWindow window(sf::VideoMode(960, 720), "Quincunx Game", sf::Style::Titlebar | sf::Style::Close);
 
     ConfigSingleton& configs = ConfigSingleton::getInstance();
@@ -74,7 +74,7 @@ int main()
         secondaryFont, primaryFont, 18, 18);
     creditsRemovedTotalText.setMainStringUpdater(creditsRemovedUpdater);
     creditsRemovedTotalText.setPrimary(sf::Color::Yellow);
-    
+
     Text2Fields matchTotalText("Matches played:", "0",
         sf::Vector2f(770, topTextY), sf::Vector2f(920, topTextY),
         secondaryFont, primaryFont, 18, 18);
@@ -105,7 +105,7 @@ int main()
         sf::Event event;
         while (window.pollEvent(event))
         {
-         
+
             switch (event.type)
             {
             case sf::Event::Closed:

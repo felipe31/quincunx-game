@@ -5,7 +5,7 @@ Ball::Ball(sf::Vector2f position, sf::Color color) {
     maxSpeed = 0.5;
     isFalling = true;
     direction = 0;
-    setRadius(38);    
+    setRadius(38);
     lastCollisionY = getRadius() * -1;
     setFillColor(color);
     setPosition(position);

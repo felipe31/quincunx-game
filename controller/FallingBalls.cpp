@@ -19,7 +19,7 @@ void FallingBalls::drawBalls(sf::RenderTarget &window) const {
 }
 
 void FallingBalls::update() {
-    
+
     for(auto it = balls.begin(); it != balls.end(); ++it) {
         Ball& ball = **it;
         if(ball.getIsFalling()) {
@@ -88,7 +88,7 @@ int FallingBalls::countPoints(std::vector<PrizeBox> prizeBoxes) {
                 points += box.getPrize();
 
             }
-        } 
+        }
     }
 
     return points;

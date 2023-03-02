@@ -7,7 +7,7 @@
 class DottedField {
 private:
     std::vector<std::vector<std::shared_ptr<sf::CircleShape>>> dotMatrix;
-    
+
     void createDottedField(sf::Vector2f start, sf::Vector2f end, float spacing);
 public:
     DottedField() { };

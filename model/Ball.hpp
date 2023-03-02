@@ -14,10 +14,10 @@ public:
 
     void setFallingSpeed(float speed);
     float getFallingSpeed();
-    
+
     void setIsFalling(bool falling);
     float getIsFalling();
-    
+
     void setMaxSpeed(float speed);
     float getMaxSpeed();
 
