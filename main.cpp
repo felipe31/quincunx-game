@@ -26,9 +26,9 @@ std::string matchesPlayedUpdater() {
     GameStateSingleton &gameState = GameStateSingleton::getInstance();
     return std::to_string(gameState.getMatchCount());
 }
-int main()
-{
-    sf::RenderWindow window(sf::VideoMode(960, 720), "Quincunx Game", sf::Style::Titlebar | sf::Style::Close);
+
+int main() {
+    sf::RenderWindow window(sf::VideoMode(960, 720), "Quincunx Game", sf::Style::Titlebar | sf::Style::Close | sf::Style::Resize);
 
     ConfigSingleton& configs = ConfigSingleton::getInstance();
     sf::Font& primaryFont = configs.getPrimaryFont();
@@ -100,72 +100,75 @@ int main()
     sf::Time time;
 
     // Game loop
-    while (window.isOpen())
-    {
+    while (window.isOpen()) {
         sf::Event event;
-        while (window.pollEvent(event))
-        {
+        while (window.pollEvent(event)) {
 
-            switch (event.type)
-            {
-            case sf::Event::Closed:
-                window.close();
-                break;
-
-            // Key handling
-            case sf::Event::KeyPressed:
-
-                // Press Escape to quit the game
-                switch (event.key.code)
-                {
-                case sf::Keyboard::Escape:
+            switch (event.type) {
+                case sf::Event::Closed:
                     window.close();
                     break;
-                case sf::Keyboard::Q:
-                    creditsInText.FillColorSecondary();
-                    break;
-                case sf::Keyboard::W:
-                    creditsOutText.FillColorSecondary();
-                    break;
-                case sf::Keyboard::Space:
-                    startText.FillColorSecondary();
-                    break;
-                }
-                break;
 
-            case sf::Event::KeyReleased:
-                switch (event.key.code)
-                {
-                case sf::Keyboard::Q:
-                    gameState.setCreditsCurrent(gameState.getCreditsCurrent() + 1);
-                    gameState.setCreditsIn(gameState.getCreditsIn() + 1);
-                    creditsInText.FillColorPrimary();
-                    break;
-                case sf::Keyboard::W:
-                    gameState.setCreditsOut(gameState.getCreditsOut() + gameState.getCreditsCurrent());
-                    gameState.setCreditsCurrent(0);
-                    creditsOutText.FillColorPrimary();
-                    break;
-                case sf::Keyboard::Space:
-                    startText.FillColorPrimary();
-                    if (isRunningGame) {
-                        isPaused = !isPaused;
-                        clock.restart();
-                    } else if (gameState.getCreditsCurrent() > 0) {
-                        gameState.setCreditsCurrent(gameState.getCreditsCurrent() - 1);
-                        gameState.setMatchCount(gameState.getMatchCount() + 1);
-                        if(!isRunningGame) {
-                            isRunningGame = true;
-                            isPaused = false;
-                            isFinished = false;
-                            clock.restart();
-                            gameBoard.startGame(configs.getBallsAmount());
-                        }
+                // Key handling
+                case sf::Event::KeyPressed:
+
+                    // Press Escape to quit the game
+                    switch (event.key.code) {
+                        case sf::Keyboard::Escape:
+                            window.close();
+                            break;
+                        case sf::Keyboard::Q:
+                            creditsInText.FillColorSecondary();
+                            break;
+                        case sf::Keyboard::W:
+                            creditsOutText.FillColorSecondary();
+                            break;
+                        case sf::Keyboard::Space:
+                            startText.FillColorSecondary();
+                            break;
+                        default:
+                            break;
                     }
-
                     break;
-                }
-                break;
+
+                case sf::Event::KeyReleased:
+                    switch (event.key.code) {
+                    case sf::Keyboard::Q:
+                        gameState.setCreditsCurrent(gameState.getCreditsCurrent() + 1);
+                        gameState.setCreditsIn(gameState.getCreditsIn() + 1);
+                        creditsInText.FillColorPrimary();
+                        break;
+                    case sf::Keyboard::W:
+                        gameState.setCreditsOut(gameState.getCreditsOut() + gameState.getCreditsCurrent());
+                        gameState.setCreditsCurrent(0);
+                        creditsOutText.FillColorPrimary();
+                        break;
+                    case sf::Keyboard::Space:
+                        startText.FillColorPrimary();
+
+                        if (isRunningGame) {
+                            isPaused = !isPaused;
+                            clock.restart();
+                        } else if (gameState.getCreditsCurrent() > 0) {
+                            gameState.setCreditsCurrent(gameState.getCreditsCurrent() - 1);
+                            gameState.setMatchCount(gameState.getMatchCount() + 1);
+
+                            if(!isRunningGame) {
+                                isRunningGame = true;
+                                isPaused = false;
+                                isFinished = false;
+                                clock.restart();
+                                gameBoard.startGame(configs.getBallsAmount());
+                            }
+                        }
+
+                        break;
+                    default:
+                        break;
+                    }
+                    break;
+                default:
+                    break;
             }
         }
         window.clear(sf::Color::Black);
